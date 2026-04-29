@@ -1,0 +1,63 @@
+<Window x:Class="SimpleLoginDemo.Features.Login.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:SimpleLoginDemo.Shared.Controls"
+        mc:Ignorable="d"
+        Title="登录窗口"
+        Height="420"
+        Width="420"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--
+            TextBlock 常用于显示只读文本。
+            这里作为页面标题。
+        -->
+        <TextBlock FontSize="24"
+                   FontWeight="Bold"
+                   Text="用户登录" />
+
+        <StackPanel Grid.Row="1" Margin="0,24,0,0">
+            <TextBlock Margin="0,0,0,6" Text="用户名" />
+            <!--
+                Binding 的意思是：把 TextBox.Text 绑定到 ViewModel.UserName。
+                UpdateSourceTrigger=PropertyChanged 表示输入时立即同步。
+            -->
+            <TextBox Height="36"
+                     Padding="8"
+                     Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Margin="0,16,0,0">
+            <TextBlock Margin="0,0,0,6" Text="密码" />
+            <controls:BindablePasswordBox Height="36"
+                                          Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+
+        <!--
+            Button.Command 绑定到 LoginCommand。
+            LoginCommand 不是手写的，而是由 [RelayCommand] 自动生成。
+        -->
+        <Button Grid.Row="3"
+                Margin="0,20,0,0"
+                Height="38"
+                Content="登录"
+                Command="{Binding LoginCommand}" />
+
+        <TextBlock Grid.Row="4"
+                   Margin="0,16,0,0"
+                   Foreground="SteelBlue"
+                   TextWrapping="Wrap"
+                   Text="{Binding Message}" />
+    </Grid>
+</Window>

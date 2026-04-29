@@ -1,0 +1,141 @@
+<Window x:Class="SimpleLoginDemo.Features.Management.Views.ManagementWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="管理窗口"
+        Height="520"
+        Width="820"
+        WindowStartupLocation="CenterScreen">
+    <!--
+        这个窗口的 DataContext 会在 App.xaml.cs 中设置为 ManagementViewModel。
+        因此这里的所有 Binding 默认都去 ViewModel 里找对应属性。
+    -->
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Border Padding="12"
+                Background="#FFF3F7FB"
+                CornerRadius="8">
+            <!--
+                StringFormat 用来在绑定值外再包一层显示文本。
+            -->
+            <TextBlock FontSize="18"
+                FontWeight="SemiBold"
+                Text="{Binding CurrentUserName, StringFormat=欢迎你，{0}！下面可以练习用户 CRUD。}" />
+        </Border>
+
+        <Grid Grid.Row="1" Margin="0,18,0,18">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                <TextBlock Margin="0,0,0,6" Text="Id" />
+                <TextBox Height="34"
+                         Padding="8"
+                         Text="{Binding EditIdText, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Margin="0,0,12,0">
+                <TextBlock Margin="0,0,0,6" Text="用户名" />
+                <TextBox Height="34"
+                         Padding="8"
+                         Text="{Binding EditUserName, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" Margin="0,0,12,0">
+                <TextBlock Margin="0,0,0,6" Text="密码" />
+                <TextBox Height="34"
+                         Padding="8"
+                         Text="{Binding EditPassword, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            
+            <StackPanel Grid.Column="3" Margin="0,0,12,0">
+                <TextBlock Margin="0,0,0,6" Text="角色" />
+                <TextBox Height="34"
+                         Padding="8"
+                         Text="{Binding EditRole, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            
+
+            <!--
+                这三个命令都由 [RelayCommand] 自动生成：
+                AddUserCommand / UpdateUserCommand / DeleteUserCommand
+            -->
+            <Button Grid.Column="4"
+                    Margin="0,22,10,0"
+                    Width="78"
+                    Height="34"
+                    Content="新增"
+                    Command="{Binding AddUserCommand}" />
+
+            <Button Grid.Column="5"
+                    Margin="0,22,10,0"
+                    Width="78"
+                    Height="34"
+                    Content="修改"
+                    Command="{Binding UpdateUserCommand}" />
+
+            <Button Grid.Column="6"
+                    Margin="0,22,0,0"
+                    Width="78"
+                    Height="34"
+                    Content="删除"
+                    Command="{Binding DeleteUserCommand}" />
+        </Grid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Width="100" Text="搜索：" FontWeight="Bold" VerticalAlignment="Center" />
+            <TextBox Width="300" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" Margin="6,0,0,0" VerticalAlignment="Center" />
+            <Button Width="100" Command="{Binding SearchCommand}" Content="搜索" Margin="6,0,0,0" VerticalAlignment="Center" />
+            <Button Width="100" Command="{Binding ClearSearchCommand}" Content="清空" Margin="6,0,0,0" VerticalAlignment="Center" />
+            <Button Width="100" Command="{Binding LogoutCommand}" Content="退出登录" Margin="6,0,0,0" VerticalAlignment="Center" />
+        </StackPanel>
+        <!--
+            ItemsSource 绑定列表数据源。
+            SelectedItem 双向绑定当前选中的用户对象。
+        -->
+        <DataGrid Grid.Row="3"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  HeadersVisibility="Column"
+                  IsReadOnly="True"
+                  ItemsSource="{Binding UsersView}"
+                  SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="120"
+                                    Binding="{Binding Id}"
+                                    Header="Id" />
+                <DataGridTextColumn Width="*"
+                                    Binding="{Binding UserName}"
+                                    Header="用户名" />
+                <DataGridTextColumn Width="*"
+                                    Binding="{Binding Password}"
+                                    Header="密码" />
+                <DataGridTextColumn Width="*"
+                                    Binding="{Binding Role}"
+                                    Header="角色" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock Grid.Row="4"
+                   Margin="0,14,0,0"
+                   Foreground="SteelBlue"
+                   Text="{Binding Message}" />
+    </Grid>
+</Window>

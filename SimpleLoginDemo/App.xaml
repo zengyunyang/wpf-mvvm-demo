@@ -1,0 +1,15 @@
+<Application x:Class="SimpleLoginDemo.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Application.Resources>
+        <!--
+            Application 是整个 WPF 程序的应用级对象。
+            Resources 表示全局资源字典，通常会放：
+            1. 全局样式
+            2. 颜色与画刷
+            3. 控件模板
+
+            当前教学示例先保持最小结构，不额外引入样式系统。
+        -->
+    </Application.Resources>
+</Application>
