@@ -8,6 +8,20 @@ using System.Windows.Data;
 
 namespace SimpleLoginDemo.Features.Management.ViewModels;
 
+public partial class ManagementEditFieldViewModel : ObservableObject
+{
+    public ManagementEditFieldViewModel(string label, string value = "")
+    {
+        Label = label;
+        this.value = value;
+    }
+
+    public string Label { get; }
+
+    [ObservableProperty]
+    private string value = string.Empty;
+}
+
 /// <summary>
 /// 用户管理页面的 ViewModel。
 /// 用来演示最基础的增删改查以及表格选中联动编辑区。
@@ -15,6 +29,10 @@ namespace SimpleLoginDemo.Features.Management.ViewModels;
 public partial class ManagementViewModel : ObservableObject
 {
     private readonly UserStore _userStore;
+    private readonly ManagementEditFieldViewModel _editIdField;
+    private readonly ManagementEditFieldViewModel _editUserNameField;
+    private readonly ManagementEditFieldViewModel _editPasswordField;
+    private readonly ManagementEditFieldViewModel _editRoleField;
 
     public ManagementViewModel(UserStore userStore, User currentUser)
     {
@@ -23,6 +41,23 @@ public partial class ManagementViewModel : ObservableObject
         Users = userStore.Users;
         UsersView = CollectionViewSource.GetDefaultView(Users);
         UsersView.Filter = FilterUser;
+
+        _editIdField = new ManagementEditFieldViewModel("Id");
+        _editUserNameField = new ManagementEditFieldViewModel("用户名");
+        _editPasswordField = new ManagementEditFieldViewModel("密码");
+        _editRoleField = new ManagementEditFieldViewModel("角色");
+        EditFields =
+        [
+            _editIdField,
+            _editUserNameField,
+            _editPasswordField,
+            _editRoleField
+        ];
+
+        foreach (var field in EditFields)
+        {
+            field.PropertyChanged += OnEditFieldPropertyChanged;
+        }
 
         if (Users.Count > 0)
         {
@@ -54,6 +89,12 @@ public partial class ManagementViewModel : ObservableObject
     public ICollectionView UsersView { get; }
 
     /// <summary>
+    /// 提供给编辑区的表单项集合。
+    /// 让界面通过 ItemsControl 渲染，减少重复 XAML。
+    /// </summary>
+    public IReadOnlyList<ManagementEditFieldViewModel> EditFields { get; }
+
+    /// <summary>
     /// 当前选中的用户。
     /// 当它变化时，需要刷新“修改/删除”按钮状态。
     /// </summary>
@@ -66,31 +107,35 @@ public partial class ManagementViewModel : ObservableObject
     /// 编辑区中的 Id 文本。
     /// TextBox 输入本质是字符串，所以先用 string 接收，再在保存时解析为 int。
     /// </summary>
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(AddUserCommand))]
-    [NotifyCanExecuteChangedFor(nameof(UpdateUserCommand))]
-    private string editIdText = string.Empty;
+    public string EditIdText
+    {
+        get => _editIdField.Value;
+        set => _editIdField.Value = value;
+    }
 
     /// <summary>
     /// 编辑区中的用户名。
     /// </summary>
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(AddUserCommand))]
-    [NotifyCanExecuteChangedFor(nameof(UpdateUserCommand))]
-    private string editUserName = string.Empty;
+    public string EditUserName
+    {
+        get => _editUserNameField.Value;
+        set => _editUserNameField.Value = value;
+    }
 
     /// <summary>
     /// 编辑区中的密码。
     /// </summary>
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(AddUserCommand))]
-    [NotifyCanExecuteChangedFor(nameof(UpdateUserCommand))]
-    private string editPassword = string.Empty;
+    public string EditPassword
+    {
+        get => _editPasswordField.Value;
+        set => _editPasswordField.Value = value;
+    }
 
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(AddUserCommand))]
-    [NotifyCanExecuteChangedFor(nameof(UpdateUserCommand))]
-    private string editRole = string.Empty;
+    public string EditRole
+    {
+        get => _editRoleField.Value;
+        set => _editRoleField.Value = value;
+    }
 
     /// <summary>
     /// 页面底部提示消息。
@@ -118,6 +163,17 @@ public partial class ManagementViewModel : ObservableObject
     partial void OnSearchTextChanged(string value)
     {
         ApplySearch();
+    }
+
+    private void OnEditFieldPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(ManagementEditFieldViewModel.Value))
+        {
+            return;
+        }
+
+        AddUserCommand.NotifyCanExecuteChanged();
+        UpdateUserCommand.NotifyCanExecuteChanged();
     }
 
     /// <summary>

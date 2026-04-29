@@ -34,69 +34,54 @@
 
         <Grid Grid.Row="1" Margin="0,18,0,18">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" />
-
-                <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Margin="0,0,12,0">
-                <TextBlock Margin="0,0,0,6" Text="Id" />
-                <TextBox Height="34"
-                         Padding="8"
-                         Text="{Binding EditIdText, UpdateSourceTrigger=PropertyChanged}" />
+            <ItemsControl Grid.Column="0"
+                          Margin="0,0,12,0"
+                          ItemsSource="{Binding EditFields}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="4" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0,0,12,0">
+                            <TextBlock Margin="0,0,0,6" Text="{Binding Label}" />
+                            <TextBox Height="34"
+                                     Padding="8"
+                                     Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <StackPanel Grid.Column="1"
+                        Margin="0,22,0,0"
+                        Orientation="Horizontal">
+                <!--
+                    这三个命令都由 [RelayCommand] 自动生成：
+                    AddUserCommand / UpdateUserCommand / DeleteUserCommand
+                -->
+                <Button Margin="0,0,10,0"
+                        Width="78"
+                        Height="34"
+                        Content="新增"
+                        Command="{Binding AddUserCommand}" />
+
+                <Button Margin="0,0,10,0"
+                        Width="78"
+                        Height="34"
+                        Content="修改"
+                        Command="{Binding UpdateUserCommand}" />
+
+                <Button Width="78"
+                        Height="34"
+                        Content="删除"
+                        Command="{Binding DeleteUserCommand}" />
             </StackPanel>
-
-            <StackPanel Grid.Column="1" Margin="0,0,12,0">
-                <TextBlock Margin="0,0,0,6" Text="用户名" />
-                <TextBox Height="34"
-                         Padding="8"
-                         Text="{Binding EditUserName, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
-
-            <StackPanel Grid.Column="2" Margin="0,0,12,0">
-                <TextBlock Margin="0,0,0,6" Text="密码" />
-                <TextBox Height="34"
-                         Padding="8"
-                         Text="{Binding EditPassword, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
-            
-            <StackPanel Grid.Column="3" Margin="0,0,12,0">
-                <TextBlock Margin="0,0,0,6" Text="角色" />
-                <TextBox Height="34"
-                         Padding="8"
-                         Text="{Binding EditRole, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
-            
-
-            <!--
-                这三个命令都由 [RelayCommand] 自动生成：
-                AddUserCommand / UpdateUserCommand / DeleteUserCommand
-            -->
-            <Button Grid.Column="4"
-                    Margin="0,22,10,0"
-                    Width="78"
-                    Height="34"
-                    Content="新增"
-                    Command="{Binding AddUserCommand}" />
-
-            <Button Grid.Column="5"
-                    Margin="0,22,10,0"
-                    Width="78"
-                    Height="34"
-                    Content="修改"
-                    Command="{Binding UpdateUserCommand}" />
-
-            <Button Grid.Column="6"
-                    Margin="0,22,0,0"
-                    Width="78"
-                    Height="34"
-                    Content="删除"
-                    Command="{Binding DeleteUserCommand}" />
         </Grid>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10" HorizontalAlignment="Center" VerticalAlignment="Center">

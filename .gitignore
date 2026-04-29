@@ -1,0 +1,52 @@
+# ==============================================
+# WPF / C# 官方标准 .gitignore
+# 改代码只会显示你真正改的 cs/xaml，不会乱变
+# ==============================================
+
+## 视觉工作室自动生成的缓存文件
+.vs/
+*.user
+*.useross
+*.sln.docstates
+*.suo
+
+## 构建输出
+[Bb]in/
+[Oo]bj/
+[Rr]eleases/
+x64/
+x86/
+[Aa]rtifacts/
+obj/
+bin/
+
+## 日志文件
+*.log
+*.log.txt
+
+## 包缓存
+packages/
+*.nuget.props
+*.nuget.targets
+
+## 设计器生成的数据
+*.pidb
+*.svclog
+*.scc
+
+## 工具目录
+_CNCReports/
+TestResults/
+*.coverage
+*.crash
+
+## 临时文件
+*.tmp
+*.temp
+*.cache
+
+## 编辑器
+.idea/
+.vscode/
+*.swp
+*.DS_Store
