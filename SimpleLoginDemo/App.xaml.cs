@@ -1,5 +1,7 @@
 using System.Windows;
 using SimpleLoginDemo.Domain.Entities;
+using SimpleLoginDemo.Features.ChangePassword.ViewModels;
+using SimpleLoginDemo.Features.ChangePassword.Views;
 using SimpleLoginDemo.Features.Login.ViewModels;
 using SimpleLoginDemo.Features.Login.Views;
 using SimpleLoginDemo.Features.Management.ViewModels;
@@ -57,6 +59,22 @@ public partial class App : Application
                 managementWindow.Close();
             };
 
+            // 点击修改密码
+            managementViewModel.ChangePasswordRequested += (_, _) =>
+            {
+                var changePasswordViewModel = new ChangePasswordViewModel(_userStore, user);
+                var changePasswordWindow = new ChangePasswordWindow
+                {
+                    DataContext = changePasswordViewModel
+                };
+                // 修改密码绑定成功事件
+                changePasswordViewModel.ChangePasswordSucceededRequested += (_, _) =>
+                {
+                    ShowLoginWindow();
+                    managementWindow.Close();
+                };
+                changePasswordWindow.ShowDialog();
+            };
             managementWindow.Show();
             loginWindow.Close();
         };

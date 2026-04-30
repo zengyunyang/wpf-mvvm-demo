@@ -317,6 +317,13 @@ public partial class ManagementViewModel : ObservableObject
         LogoutRequested?.Invoke(this, EventArgs.Empty);
     }
 
+    public event EventHandler? ChangePasswordRequested;
+    [RelayCommand]
+    private void ChangePassword()
+    {
+        ChangePasswordRequested?.Invoke(this, EventArgs.Empty);
+    }
+
     /// <summary>
     /// 手动触发一次搜索。
     /// 实际过滤逻辑仍然由 ICollectionView 承担。

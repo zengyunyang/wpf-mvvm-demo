@@ -163,4 +163,9 @@ public class UserStore
         var json = JsonSerializer.Serialize(seedUsers, JsonOptions);
         File.WriteAllText(_filePath, json);
     }
+
+    internal void UpdateUser(User currentUser, object id, string userName, string password, object role)
+    {
+        throw new NotImplementedException();
+    }
 }
