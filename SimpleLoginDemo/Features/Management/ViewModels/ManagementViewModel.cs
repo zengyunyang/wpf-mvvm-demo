@@ -239,7 +239,7 @@ public partial class ManagementViewModel : ObservableObject
             Role = EditRole
         };
 
-        Users.Add(user);
+        _userStore.AddUser(user);
         UsersView.Refresh();
         SelectedUser = user;
         Message = "新增用户成功。";
@@ -276,10 +276,7 @@ public partial class ManagementViewModel : ObservableObject
             return;
         }
 
-        SelectedUser.Id = editId;
-        SelectedUser.UserName = trimmedUserName;
-        SelectedUser.Password = EditPassword;
-        SelectedUser.Role = EditRole;
+        _userStore.UpdateUser(SelectedUser, editId, trimmedUserName, EditPassword, EditRole);
 
         UsersView.Refresh();
         Message = "修改用户成功。";
@@ -297,7 +294,7 @@ public partial class ManagementViewModel : ObservableObject
         }
 
         var userToDelete = SelectedUser;
-        Users.Remove(userToDelete);
+        _userStore.DeleteUser(userToDelete);
         UsersView.Refresh();
         SelectedUser = Users.FirstOrDefault();
         Message = $"已删除用户：{userToDelete.UserName}";
